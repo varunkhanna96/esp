@@ -23,6 +23,7 @@ namespace api_manager {
 namespace auth {
 // The header key to send endpoint api user info.
 const char kEndpointApiUserInfo[] = "X-Endpoint-API-UserInfo";
+const char testHeader = "testHeader";
 }  // namespace auth
 
 // This function checks auth for a given request.

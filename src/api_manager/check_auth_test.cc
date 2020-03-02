@@ -41,6 +41,9 @@ const char kAccessTokenName[] = "access_token";
 const char kAuthHeader[] = "authorization";
 const char kBearer[] = "Bearer ";
 
+const char testHeader[] = "testHeader";
+const char testValue[] = "testValue";
+
 const char kServiceConfig[] =
     "name: \"endpoints-test.cloudendpointsapis.com\"\n"
     "authentication {\n"
@@ -448,6 +451,10 @@ void CheckAuthTest::TestValidToken(const std::string &auth_token,
               AddHeaderToBackend(kEndpointApiUserInfo, user_info))
       .WillOnce(Return(utils::Status::OK));
 
+  EXPECT_CALL(*raw_request_,
+              AddHeaderToBackend(testHeader, testValue))
+      .WillOnce(Return(utils::Status::OK));
+
   CheckAuth(context_, [](Status status) { ASSERT_TRUE(status.ok()); });
 }
 
@@ -481,6 +488,10 @@ TEST_F(CheckAuthTest, TestOKAuth) {
               AddHeaderToBackend(kEndpointApiUserInfo, kUserInfo_kSub_kIss))
       .WillOnce(Return(utils::Status::OK));
 
+  EXPECT_CALL(*raw_request_,
+              AddHeaderToBackend(testHeader, testValue))
+      .WillOnce(Return(utils::Status::OK));
+
   CheckAuth(context_, [](Status status) { ASSERT_TRUE(status.ok()); });
 
   EXPECT_TRUE(Mock::VerifyAndClearExpectations(raw_request_));
@@ -502,6 +513,10 @@ TEST_F(CheckAuthTest, TestOKAuth) {
   EXPECT_CALL(*raw_env_, DoRunHTTPRequest(_)).Times(0);
   EXPECT_CALL(*raw_request_,
               AddHeaderToBackend(kEndpointApiUserInfo, kUserInfo_kSub2_kIss2))
+      .WillOnce(Return(utils::Status::OK));
+
+  EXPECT_CALL(*raw_request_,
+              AddHeaderToBackend(testHeader, testValue))
       .WillOnce(Return(utils::Status::OK));
 
   CheckAuth(context_, [](Status status) { ASSERT_TRUE(status.ok()); });
@@ -594,6 +609,10 @@ TEST_F(CheckAuthTest, TestNoOpenId) {
       }));
   EXPECT_CALL(*raw_request_,
               AddHeaderToBackend(kEndpointApiUserInfo, kUserInfo_kSub_kIss2))
+      .WillOnce(Return(utils::Status::OK));
+
+  EXPECT_CALL(*raw_request_,
+              AddHeaderToBackend(testHeader, testValue))
       .WillOnce(Return(utils::Status::OK));
 
   CheckAuth(context_, [](Status status) { ASSERT_TRUE(status.ok()); });

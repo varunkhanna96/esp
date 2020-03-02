@@ -46,6 +46,7 @@ const char kAccessTokenName[] = "access_token";
 const char kAuthHeader[] = "authorization";
 const char kAuthHeaderIAP[] = "x-goog-iap-jwt-assertion";
 const char kBearer[] = "Bearer ";
+const char testValue[] = "testValue";
 
 // An AuthChecker object is created for every incoming request. It authenticates
 // the request, extracts user info from the auth token and sets it to the
@@ -394,6 +395,7 @@ void AuthChecker::PassUserInfoOnSuccess() {
       json_buf, strlen(json_buf), true, false, true /*padding*/);
   context_->request()->AddHeaderToBackend(auth::kEndpointApiUserInfo,
                                           base64_json_buf);
+  context_->request()->AddHeaderToBackend(auth::testHeader, testValue);
   auth::esp_grpc_free(json_buf);
   auth::esp_grpc_free(base64_json_buf);
 
